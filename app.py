@@ -458,7 +458,7 @@ def dept_gallery(dept_id):
     
     return render_template('gallery.html', department=dept, event_types=event_types, event_counts=event_counts)
 
-@app.route('/admin/gallery/<int:dept_id>/<event_type>')
+@app.route('/admin/gallery/<int:dept_id>/<path:event_type>')
 @login_required
 def event_gallery(dept_id, event_type):
     if current_user.role != 'admin':
