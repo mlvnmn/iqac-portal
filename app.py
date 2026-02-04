@@ -678,5 +678,75 @@ def export_data():
         download_name='iqac_event_data.xlsx'
     )
 
+# --- Auto-Initialize DB for Render Free Tier ---
+with app.app_context():
+    try:
+        # Check if tables exist
+        inspector = db.inspect(db.engine)
+        if not inspector.get_table_names():
+            print("No tables found. Initializing database...")
+            # Re-use the logic from init_db
+            db.create_all()
+
+            # 1. Populate Departments
+            dept_names = [
+                "Botany", "Chemistry", "Physics", "Mathematics", "English", "Malayalam",
+                "Commerce", "Computer Science", "Psychology", "Sociology", "Statistics",
+                "Physical Education", "Syriac", "Zoology", "Biotechnology", "Economics", "Social Work"
+            ]
+            
+            depts = {}
+            for name in dept_names:
+                d = Department(name=name)
+                db.session.add(d)
+                depts[name] = d 
+            
+            db.session.flush()
+
+            # Reload depts
+            dept_map = {d.name: d for d in Department.query.all()}
+
+            # 2. Create Users
+            users = []
+            
+            # Admin
+            admin = User(username="admin", role="admin", department_id=None)
+            admin.set_password("admin123")
+            users.append(admin)
+
+            # Create teacher and student for each department
+            for dept_name, dept in dept_map.items():
+                clean_name = dept_name.lower().replace(" ", "_")
+                
+                # Teacher
+                teacher = User(username=f"teacher_{clean_name}", role="sub-admin", department_id=dept.id)
+                teacher.set_password("123")
+                users.append(teacher)
+                
+                # Student
+                student = User(username=f"student_{clean_name}", role="student", department_id=dept.id)
+                student.set_password("123")
+                users.append(student)
+
+            for u in users:
+                db.session.add(u)
+            
+            # 3. Populate Event Types
+            event_type_names = [
+                "Research Methodology", "IPR", "Workshops", "Seminar", "Conference",
+                "Internship", "Project", "Industrial Visit", "Field Visit",
+                "Expert Talks", "Panel Discussions", "Exhibition",
+                "Extension Activities", "Outreach Programs", "Competitions/Fest"
+            ]
+            
+            for et_name in event_type_names:
+                et = EventType(name=et_name)
+                db.session.add(et)
+            
+            db.session.commit()
+            print("Database initialized automatically.")
+    except Exception as e:
+        print(f"Error during auto-initialization: {e}")
+
 if __name__ == '__main__':
     app.run(debug=True)
