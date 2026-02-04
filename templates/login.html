@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - IQAC Portal</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="login-wrapper"
+        style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('{{ url_for('static', filename='login-bg.jpg') }}') center/cover no-repeat fixed;">
+        <div class="login-container">
+            <div class="card">
+                <div class="login-logo"
+                    style="background: transparent; box-shadow: none; width: 120px; height: 120px; padding: 0;">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="St. Berchmans College"
+                        style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <h2>SB College IQAC</h2>
+                <p class="subtitle">Sign in to your account</p>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" style="text-align: left;">
+                    <i class="fas fa-exclamation-circle"></i> {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <form method="POST" action="" style="text-align: left;">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Enter username" required
+                            autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div style="position: relative;">
+                            <input type="password" id="password" name="password" placeholder="Enter password" required
+                                style="padding-right: 3rem;">
+                            <button type="button" id="toggle-password" onmousedown="showPassword()"
+                                onmouseup="hidePassword()" onmouseleave="hidePassword()" ontouchstart="showPassword()"
+                                ontouchend="hidePassword()"
+                                style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 0.25rem; transition: color 0.15s;">
+                                <i class="fas fa-eye" id="eye-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+                        Sign In
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            const toggleBtn = document.getElementById('toggle-password');
+
+            passwordInput.type = 'text';
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+            toggleBtn.style.color = 'var(--charcoal)';
+        }
+
+        function hidePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            const toggleBtn = document.getElementById('toggle-password');
+
+            passwordInput.type = 'password';
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+            toggleBtn.style.color = 'var(--text-muted)';
+        }
+    </script>
+</body>
+
+</html>

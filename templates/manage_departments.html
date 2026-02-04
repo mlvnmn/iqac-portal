@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% block title %}Manage Departments - IQAC Portal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline" title="Back">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 style="margin: 0;"><i class="fas fa-sitemap"></i> Manage Departments</h1>
+    </div>
+</div>
+
+<!-- Credentials Modal -->
+{% if new_credentials %}
+<div id="credentials-modal"
+    style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px);">
+    <div
+        style="background: white; border-radius: var(--radius-lg); padding: 2rem; max-width: 480px; width: 90%; box-shadow: var(--shadow-lg); animation: slideIn 0.3s ease;">
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <div
+                style="width: 60px; height: 60px; background: var(--mint-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                <i class="fas fa-check" style="font-size: 1.5rem; color: var(--accent-success);"></i>
+            </div>
+            <h2 style="margin: 0 0 0.25rem;">Department Created!</h2>
+            <p style="color: var(--text-muted); margin: 0;">{{ new_credentials.department }}</p>
+        </div>
+
+        <div
+            style="background: var(--cream-light); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1rem;">
+            <h4 style="margin: 0 0 1rem; color: var(--charcoal); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-chalkboard-teacher" style="color: var(--mint-dark);"></i> Teacher Account
+            </h4>
+            <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1rem; font-size: 0.9375rem;">
+                <span style="color: var(--text-muted);">Username:</span>
+                <strong
+                    style="font-family: monospace; background: white; padding: 0.25rem 0.5rem; border-radius: 4px;">{{
+                    new_credentials.teacher_username }}</strong>
+                <span style="color: var(--text-muted);">Password:</span>
+                <strong
+                    style="font-family: monospace; background: white; padding: 0.25rem 0.5rem; border-radius: 4px;">{{
+                    new_credentials.password }}</strong>
+            </div>
+        </div>
+
+        <div
+            style="background: var(--cream-light); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
+            <h4 style="margin: 0 0 1rem; color: var(--charcoal); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-user-graduate" style="color: var(--mint-dark);"></i> Student Account
+            </h4>
+            <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1rem; font-size: 0.9375rem;">
+                <span style="color: var(--text-muted);">Username:</span>
+                <strong
+                    style="font-family: monospace; background: white; padding: 0.25rem 0.5rem; border-radius: 4px;">{{
+                    new_credentials.student_username }}</strong>
+                <span style="color: var(--text-muted);">Password:</span>
+                <strong
+                    style="font-family: monospace; background: white; padding: 0.25rem 0.5rem; border-radius: 4px;">{{
+                    new_credentials.password }}</strong>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+            <button onclick="copyCredentials()" class="btn btn-outline" style="flex: 1;">
+                <i class="fas fa-copy"></i> Copy All
+            </button>
+            <button onclick="closeModal()" class="btn btn-primary" style="flex: 1;">
+                <i class="fas fa-check"></i> Done
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+</style>
+
+<script>
+    function closeModal() {
+        document.getElementById('credentials-modal').style.display = 'none';
+    }
+
+    function copyCredentials() {
+        const text = `Department: {{ new_credentials.department }}
+
+Teacher Account:
+  Username: {{ new_credentials.teacher_username }}
+  Password: {{ new_credentials.password }}
+
+Student Account:
+  Username: {{ new_credentials.student_username }}
+  Password: {{ new_credentials.password }}`;
+
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = event.target.closest('button');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            btn.style.background = 'var(--mint-light)';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.style.background = '';
+            }, 2000);
+        });
+    }
+</script>
+{% endif %}
+
+<!-- Add Department -->
+<div class="card">
+    <div class="section-title">
+        <i class="fas fa-plus-circle"></i>
+        <h3>Add Department</h3>
+    </div>
+
+    <form method="POST" style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap;">
+        <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+            <label for="name">Department Name</label>
+            <input type="text" id="name" name="name" placeholder="e.g., Computer Science" required>
+        </div>
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-plus"></i> Add
+        </button>
+    </form>
+
+    <p style="color: var(--text-muted); font-size: 0.8125rem; margin-top: 0.75rem; margin-bottom: 0;">
+        <i class="fas fa-info-circle"></i> Teacher and student accounts will be created automatically.
+    </p>
+</div>
+
+<!-- Existing Departments -->
+<div class="card">
+    <div class="section-title">
+        <i class="fas fa-list"></i>
+        <h3>All Departments</h3>
+        <span class="badge badge-approved" style="margin-left: auto;">{{ departments|length }} total</span>
+    </div>
+
+    {% if departments %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Department Name</th>
+                <th>Teacher Account</th>
+                <th>Student Account</th>
+                <th style="text-align: right;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dept in departments %}
+            <tr>
+                <td class="text-muted">#{{ dept.id }}</td>
+                <td><strong>{{ dept.name }}</strong></td>
+                <td><code
+                        style="background: var(--cream); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8125rem;">teacher_{{ dept.name.lower().replace(' ', '_') }}</code>
+                </td>
+                <td><code
+                        style="background: var(--cream); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8125rem;">student_{{ dept.name.lower().replace(' ', '_') }}</code>
+                </td>
+                <td style="text-align: right;">
+                    <button type="button" class="btn btn-outline btn-sm"
+                        onclick="openEditModal({{ dept.id }}, '{{ dept.name }}', 'teacher_{{ dept.name.lower().replace(' ', '_') }}', 'student_{{ dept.name.lower().replace(' ', '_') }}')">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <a href="{{ url_for('delete_department', dept_id=dept.id) }}" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Delete this department and all associated data?');">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-building"></i>
+        <h3>No Departments</h3>
+        <p>Add your first department above</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Edit Department Modal -->
+<div id="edit-modal"
+    style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px);">
+    <div
+        style="background: white; border-radius: var(--radius-lg); padding: 2rem; max-width: 520px; width: 90%; box-shadow: var(--shadow-lg); animation: slideIn 0.3s ease;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-edit" style="color: var(--mint-dark);"></i> Edit Department
+            </h2>
+            <button onclick="closeEditModal()"
+                style="background: none; border: none; cursor: pointer; font-size: 1.25rem; color: var(--text-muted);">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="edit-form" method="POST">
+            <!-- Department Name -->
+            <div class="form-group">
+                <label for="edit-dept-name">Department Name</label>
+                <input type="text" id="edit-dept-name" name="dept_name" required>
+            </div>
+
+            <!-- Teacher Credentials -->
+            <div
+                style="background: var(--cream-light); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1rem;">
+                <h4 style="margin: 0 0 0.75rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9375rem;">
+                    <i class="fas fa-chalkboard-teacher" style="color: var(--mint-dark);"></i> Teacher Account
+                </h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="edit-teacher-username" style="font-size: 0.8125rem;">Username</label>
+                        <input type="text" id="edit-teacher-username" name="teacher_username">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="edit-teacher-password" style="font-size: 0.8125rem;">New Password</label>
+                        <input type="text" id="edit-teacher-password" name="teacher_password"
+                            placeholder="Leave blank to keep">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Credentials -->
+            <div
+                style="background: var(--cream-light); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.5rem;">
+                <h4 style="margin: 0 0 0.75rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9375rem;">
+                    <i class="fas fa-user-graduate" style="color: var(--mint-dark);"></i> Student Account
+                </h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="edit-student-username" style="font-size: 0.8125rem;">Username</label>
+                        <input type="text" id="edit-student-username" name="student_username">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="edit-student-password" style="font-size: 0.8125rem;">New Password</label>
+                        <input type="text" id="edit-student-password" name="student_password"
+                            placeholder="Leave blank to keep">
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem;">
+                <button type="button" onclick="closeEditModal()" class="btn btn-outline" style="flex: 1;">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openEditModal(deptId, deptName, teacherUsername, studentUsername) {
+        document.getElementById('edit-form').action = '/admin/edit_department/' + deptId;
+        document.getElementById('edit-dept-name').value = deptName;
+        document.getElementById('edit-teacher-username').value = teacherUsername;
+        document.getElementById('edit-student-username').value = studentUsername;
+        document.getElementById('edit-teacher-password').value = '';
+        document.getElementById('edit-student-password').value = '';
+        document.getElementById('edit-modal').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+        document.getElementById('edit-modal').style.display = 'none';
+    }
+
+    // Close modal on backdrop click
+    document.getElementById('edit-modal').addEventListener('click', function (e) {
+        if (e.target === this) {
+            closeEditModal();
+        }
+    });
+</script>
+{% endblock %}

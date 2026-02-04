@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Search - IQAC Portal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline" title="Back">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 style="margin: 0;"><i class="fas fa-search"></i> Smart Search</h1>
+    </div>
+</div>
+
+<!-- Search & Filter Bar -->
+<div class="card">
+    <form method="GET" action="{{ url_for('admin_search') }}">
+        <div style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group" style="margin-bottom: 0;">
+                <input type="text" name="q" value="{{ query }}"
+                    placeholder="Search descriptions, users, departments, events..." style="width: 100%;">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </div>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+            <div class="form-group" style="margin-bottom: 0; min-width: 150px;">
+                <label style="font-size: 0.75rem; margin-bottom: 0.25rem;">Department</label>
+                <select name="dept">
+                    <option value="">All Departments</option>
+                    {% for dept in departments %}
+                    <option value="{{ dept.id }}" {% if dept_filter==dept.id|string %}selected{% endif %}>{{ dept.name
+                        }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0; min-width: 150px;">
+                <label style="font-size: 0.75rem; margin-bottom: 0.25rem;">Event Type</label>
+                <select name="event">
+                    <option value="">All Events</option>
+                    {% for et in event_types %}
+                    <option value="{{ et }}" {% if event_filter==et %}selected{% endif %}>{{ et }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0; min-width: 140px;">
+                <label style="font-size: 0.75rem; margin-bottom: 0.25rem;">Date</label>
+                <input type="date" name="date" value="{{ date_filter }}" style="width: 100%;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0; min-width: 120px;">
+                <label style="font-size: 0.75rem; margin-bottom: 0.25rem;">Sort By</label>
+                <select name="sort">
+                    <option value="newest" {% if sort_by=='newest' %}selected{% endif %}>Newest First</option>
+                    <option value="oldest" {% if sort_by=='oldest' %}selected{% endif %}>Oldest First</option>
+                </select>
+            </div>
+
+            <a href="{{ url_for('admin_search') }}" class="btn btn-outline" style="margin-top: auto;">
+                <i class="fas fa-times"></i> Clear
+            </a>
+        </div>
+    </form>
+</div>
+
+<!-- Results -->
+<div class="card">
+    <div class="section-title">
+        <i class="fas fa-list"></i>
+        <h3>Results</h3>
+        <span class="badge badge-approved" style="margin-left: auto;">{{ results|length }} found</span>
+    </div>
+
+    {% if results %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Date & Time</th>
+                <th>Department</th>
+                <th>Event</th>
+                <th>User</th>
+                <th>Description</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sub in results %}
+            <tr>
+                <td class="text-secondary">{{ sub.created_at|to_ist }}</td>
+                <td><strong>{{ sub.department.name }}</strong></td>
+                <td>{{ sub.event_type }}</td>
+                <td>{{ sub.user.username }}</td>
+                <td class="text-secondary">{{ sub.description[:40] if sub.description else '—' }}{% if sub.description
+                    and sub.description|length > 40 %}...{% endif %}</td>
+                <td>
+                    {% if sub.image_filename %}
+                    <a href="{{ sub.image_filename }}" target="_blank" class="btn btn-outline btn-sm">
+                        <i class="fas fa-image"></i>
+                    </a>
+                    {% else %}
+                    <span class="text-muted">—</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-search"></i>
+        <h3>No Results</h3>
+        <p>Try adjusting your search or filters</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

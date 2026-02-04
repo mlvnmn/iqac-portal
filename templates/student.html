@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - IQAC Portal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-graduation-cap"></i> Student Dashboard</h1>
+    <span class="nav-user">
+        <i class="fas fa-building"></i> {{ current_user.department.name }}
+    </span>
+</div>
+
+<!-- Upload Form -->
+<div class="card">
+    <div class="section-title">
+        <i class="fas fa-plus-circle"></i>
+        <h3>Submit New Event</h3>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div class="form-group" style="margin-bottom: 0;">
+                <label for="event_type">Event Type</label>
+                <div class="searchable-dropdown" style="position: relative;">
+                    <div class="dropdown-trigger" onclick="toggleDropdown()"
+                        style="display: flex; align-items: center; justify-content: space-between; padding: 0.625rem 0.875rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer;">
+                        <span id="selected-text">Select event type...</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.75rem; color: var(--text-muted);"></i>
+                    </div>
+                    <input type="hidden" name="event_type" id="event_type" required>
+
+                    <div id="dropdown-menu"
+                        style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); margin-top: 0.25rem; z-index: 100; max-height: 280px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+                        <div
+                            style="padding: 0.5rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; background: var(--bg-secondary);">
+                            <div style="position: relative;">
+                                <i class="fas fa-search"
+                                    style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.75rem;"></i>
+                                <input type="text" id="dropdown-search" placeholder="Search..."
+                                    style="width: 100%; font-size: 0.875rem; padding: 0.5rem 2rem 0.5rem 2rem;"
+                                    oninput="filterOptions(this.value); toggleClearBtn(this.value)"
+                                    onclick="event.stopPropagation()">
+                                <i class="fas fa-times" id="clear-search-btn" onclick="clearSearch(event)"
+                                    style="display: none; position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.75rem; cursor: pointer; padding: 0.25rem; border-radius: 50%; transition: color 0.15s;"
+                                    onmouseenter="this.style.color='var(--danger)'"
+                                    onmouseleave="this.style.color='var(--text-muted)'"></i>
+                            </div>
+                        </div>
+                        <div id="dropdown-options" style="max-height: 220px; overflow-y: auto;">
+                            {% for et in event_types %}
+                            <div class="dropdown-option" data-value="{{ et.name }}"
+                                onclick="selectOption('{{ et.name }}')"
+                                style="padding: 0.625rem 0.875rem; cursor: pointer; transition: background 0.15s;">
+                                {{ et.name }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            let dropdownOpen = false;
+
+            function toggleDropdown() {
+                const menu = document.getElementById('dropdown-menu');
+                dropdownOpen = !dropdownOpen;
+                menu.style.display = dropdownOpen ? 'block' : 'none';
+                if (dropdownOpen) {
+                    document.getElementById('dropdown-search').focus();
+                }
+            }
+
+            function selectOption(value) {
+                document.getElementById('event_type').value = value;
+                document.getElementById('selected-text').textContent = value;
+                document.getElementById('dropdown-menu').style.display = 'none';
+                dropdownOpen = false;
+            }
+
+            function filterOptions(query) {
+                const options = document.querySelectorAll('.dropdown-option');
+                const lowerQuery = query.toLowerCase();
+
+                options.forEach(option => {
+                    const matches = option.textContent.toLowerCase().includes(lowerQuery);
+                    option.style.display = matches ? 'block' : 'none';
+                });
+            }
+
+            function toggleClearBtn(value) {
+                const clearBtn = document.getElementById('clear-search-btn');
+                clearBtn.style.display = value.length > 0 ? 'block' : 'none';
+            }
+
+            function clearSearch(e) {
+                e.stopPropagation();
+                const searchInput = document.getElementById('dropdown-search');
+                searchInput.value = '';
+                filterOptions('');
+                toggleClearBtn('');
+                searchInput.focus();
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.searchable-dropdown') && dropdownOpen) {
+                    document.getElementById('dropdown-menu').style.display = 'none';
+                    dropdownOpen = false;
+                }
+            });
+
+            // Hover effect
+            document.querySelectorAll('.dropdown-option').forEach(opt => {
+                opt.addEventListener('mouseenter', () => opt.style.background = 'var(--bg-primary)');
+                opt.addEventListener('mouseleave', () => opt.style.background = 'transparent');
+            });
+        </script>
+
+        <div class="form-group mt-2">
+            <label for="description">Description / Report</label>
+            <textarea name="description" id="description" rows="3" placeholder="Enter event details..."
+                required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="image">Attach Images <span class="text-muted"
+                    style="font-weight: 400;">(Optional)</span></label>
+            <input type="file" name="image" id="image" multiple accept="image/*">
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i> Submit
+        </button>
+    </form>
+</div>
+
+<!-- Submissions History -->
+<div class="card">
+    <div class="section-title">
+        <i class="fas fa-clock"></i>
+        <h3>My Submissions</h3>
+    </div>
+
+    {% if submissions %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Description</th>
+                <th>Attachment</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sub in submissions %}
+            <tr>
+                <td><strong>{{ sub.event_type }}</strong></td>
+                <td class="text-secondary">{{ sub.description[:50] if sub.description else '—' }}{% if sub.description
+                    and sub.description|length > 50 %}...{% endif %}</td>
+                <td>
+                    {% if sub.image_filename %}
+                    <a href="{{ sub.image_filename }}" target="_blank" class="btn btn-outline btn-sm">
+                        <i class="fas fa-image"></i> View
+                    </a>
+                    {% else %}
+                    <span class="text-muted">None</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if sub.status == 'approved' %}
+                    <span class="badge badge-approved"><i class="fas fa-check"></i> Approved</span>
+                    {% elif sub.status == 'rejected' %}
+                    <span class="badge" style="background: #fee2e2; color: #b91c1c;"><i class="fas fa-times"></i>
+                        Rejected</span>
+                    {% else %}
+                    <span class="badge badge-pending"><i class="fas fa-clock"></i> Pending</span>
+                    {% endif %}
+                </td>
+                <td class="text-secondary">{{ sub.created_at|to_ist }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-inbox"></i>
+        <h3>No Submissions</h3>
+        <p>Submit your first event above</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

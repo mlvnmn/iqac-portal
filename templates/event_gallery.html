@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}{{ event_type }} - {{ department.name }} - IQAC Portal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="{{ url_for('dept_gallery', dept_id=department.id) }}" class="btn btn-outline" title="Back">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 style="margin: 0;"><i class="fas fa-images"></i> {{ event_type }}</h1>
+        <span class="nav-user">{{ department.name }}</span>
+    </div>
+</div>
+
+{% if submissions %}
+<div class="card">
+    <div class="section-title">
+        <i class="fas fa-image"></i>
+        <h3>Submissions</h3>
+        <span class="badge badge-approved" style="margin-left: auto;">{{ submissions|length }} items</span>
+    </div>
+
+    <div class="gallery-grid">
+        {% for sub in submissions %}
+        <div class="card gallery-item" style="padding: 0; overflow: hidden; margin-bottom: 0;">
+            {% if sub.image_filename %}
+            <a href="{{ sub.image_filename }}" target="_blank">
+                <img src="{{ sub.image_filename }}" alt="{{ sub.event_type }}" loading="lazy">
+            </a>
+            {% else %}
+            <div
+                style="height: 160px; display: flex; align-items: center; justify-content: center; background: var(--bg-primary);">
+                <i class="fas fa-file-alt" style="font-size: 2rem; color: var(--text-muted);"></i>
+            </div>
+            {% endif %}
+            <div class="gallery-info">
+                <strong>{{ sub.user.username }}</strong><br>
+                <span class="text-muted">{{ sub.created_at|to_ist }}</span>
+                {% if sub.description %}
+                <p style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-secondary);">{{ sub.description[:60]
+                    }}{% if sub.description|length > 60 %}...{% endif %}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <i class="fas fa-image"></i>
+        <h3>No Submissions</h3>
+        <p>No approved submissions for this event type</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

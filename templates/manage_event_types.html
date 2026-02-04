@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Manage Event Types - IQAC Portal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline" title="Back">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 style="margin: 0;"><i class="fas fa-calendar-alt"></i> Manage Event Types</h1>
+    </div>
+</div>
+
+<!-- Add Event Type -->
+<div class="card">
+    <div class="section-title">
+        <i class="fas fa-plus-circle"></i>
+        <h3>Add Event Type</h3>
+    </div>
+
+    <form method="POST" style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap;">
+        <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+            <label for="name">Event Type Name</label>
+            <input type="text" id="name" name="name" placeholder="e.g., Workshop" required>
+        </div>
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-plus"></i> Add
+        </button>
+    </form>
+</div>
+
+<!-- Existing Event Types -->
+<div class="card">
+    <div class="section-title">
+        <i class="fas fa-list"></i>
+        <h3>All Event Types</h3>
+        <span class="badge badge-approved" style="margin-left: auto;">{{ event_types|length }} total</span>
+    </div>
+
+    {% if event_types %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Event Type Name</th>
+                <th style="text-align: right;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for et in event_types %}
+            <tr>
+                <td class="text-muted">#{{ et.id }}</td>
+                <td><strong>{{ et.name }}</strong></td>
+                <td style="text-align: right;">
+                    <a href="{{ url_for('delete_event_type', et_id=et.id) }}" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Delete this event type?');">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>No Event Types</h3>
+        <p>Add your first event type above</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Review Submissions - IQAC Portal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-clipboard-check"></i> Review Submissions</h1>
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span class="nav-user">
+            <i class="fas fa-building"></i> {{ current_user.department.name }}
+        </span>
+        <a href="{{ url_for('sub_admin_bin') }}" class="btn btn-outline btn-sm">
+            <i class="fas fa-trash-alt"></i> Bin
+        </a>
+    </div>
+</div>
+
+{% if submissions %}
+<div class="grid">
+    {% for sub in submissions %}
+    <div class="card submission-card">
+        {% if sub.image_filename %}
+        <img src="{{ sub.image_filename }}" alt="{{ sub.event_type }}" loading="lazy">
+        {% else %}
+        <div
+            style="height: 180px; display: flex; align-items: center; justify-content: center; background: var(--bg-primary); border-radius: var(--radius-md); margin-bottom: 1rem;">
+            <div style="text-align: center; color: var(--text-muted);">
+                <i class="fas fa-file-alt" style="font-size: 2rem;"></i>
+                <p style="margin-top: 0.5rem; font-size: 0.8125rem;">Report Only</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <h3>{{ sub.event_type }}</h3>
+
+        <div class="meta">
+            <div class="meta-item">
+                <i class="fas fa-user"></i>
+                <span>{{ sub.user.username }}</span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-clock"></i>
+                <span>{{ sub.created_at.strftime('%b %d, %Y') }}</span>
+            </div>
+            {% if sub.description %}
+            <div class="meta-item">
+                <i class="fas fa-align-left"></i>
+                <span>{{ sub.description[:80] }}{% if sub.description|length > 80 %}...{% endif %}</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="actions">
+            <a href="{{ url_for('approve_submission', sub_id=sub.id) }}" class="btn btn-success btn-sm">
+                <i class="fas fa-check"></i> Approve
+            </a>
+            <a href="{{ url_for('reject_submission', sub_id=sub.id) }}" class="btn btn-danger btn-sm"
+                onclick="return confirm('Move to bin?');">
+                <i class="fas fa-times"></i> Reject
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <i class="fas fa-check-circle"></i>
+        <h3>All Done!</h3>
+        <p>No pending submissions to review</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

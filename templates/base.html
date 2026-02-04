@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="IQAC Event Verification Portal - Manage and verify college events">
+    <title>{% block title %}IQAC Portal{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="{{ url_for('index') }}" class="nav-brand">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo"
+                style="width: 36px; height: 36px; object-fit: contain;"> SB College IQAC
+        </a>
+        <div class="nav-links">
+            {% if current_user.is_authenticated %}
+            <span class="nav-user">
+                <i class="fas fa-user"></i> {{ current_user.username }}
+            </span>
+            {% if current_user.role == 'student' %}
+            <a href="{{ url_for('student_dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+            {% elif current_user.role == 'sub-admin' %}
+            <a href="{{ url_for('sub_admin_dashboard') }}"><i class="fas fa-tasks"></i> Review</a>
+            <a href="{{ url_for('sub_admin_bin') }}"><i class="fas fa-trash-alt"></i> Bin</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}" style="color: var(--accent-danger);"><i class="fas fa-sign-out-alt"></i>
+                Logout</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="main-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {% if category == 'success' %}<i class="fas fa-check-circle"></i>
+            {% elif category == 'danger' %}<i class="fas fa-exclamation-circle"></i>
+            {% else %}<i class="fas fa-info-circle"></i>{% endif %}
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+
+</html>
