@@ -143,46 +143,49 @@
     </div>
 
     {% if submissions %}
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Event</th>
-                <th>Description</th>
-                <th>Attachment</th>
-                <th>Status</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for sub in submissions %}
-            <tr>
-                <td><strong>{{ sub.event_type }}</strong></td>
-                <td class="text-secondary">{{ sub.description[:50] if sub.description else '—' }}{% if sub.description
-                    and sub.description|length > 50 %}...{% endif %}</td>
-                <td>
-                    {% if sub.image_filename %}
-                    <a href="{{ sub.image_filename }}" target="_blank" class="btn btn-outline btn-sm">
-                        <i class="fas fa-image"></i> View
-                    </a>
-                    {% else %}
-                    <span class="text-muted">None</span>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if sub.status == 'approved' %}
-                    <span class="badge badge-approved"><i class="fas fa-check"></i> Approved</span>
-                    {% elif sub.status == 'rejected' %}
-                    <span class="badge" style="background: #fee2e2; color: #b91c1c;"><i class="fas fa-times"></i>
-                        Rejected</span>
-                    {% else %}
-                    <span class="badge badge-pending"><i class="fas fa-clock"></i> Pending</span>
-                    {% endif %}
-                </td>
-                <td class="text-secondary">{{ sub.created_at|to_ist }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Description</th>
+                    <th>Attachment</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub in submissions %}
+                <tr>
+                    <td><strong>{{ sub.event_type }}</strong></td>
+                    <td class="text-secondary">{{ sub.description[:50] if sub.description else '—' }}{% if
+                        sub.description
+                        and sub.description|length > 50 %}...{% endif %}</td>
+                    <td>
+                        {% if sub.image_filename %}
+                        <a href="{{ sub.image_filename }}" target="_blank" class="btn btn-outline btn-sm">
+                            <i class="fas fa-image"></i> View
+                        </a>
+                        {% else %}
+                        <span class="text-muted">None</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if sub.status == 'approved' %}
+                        <span class="badge badge-approved"><i class="fas fa-check"></i> Approved</span>
+                        {% elif sub.status == 'rejected' %}
+                        <span class="badge" style="background: #fee2e2; color: #b91c1c;"><i class="fas fa-times"></i>
+                            Rejected</span>
+                        {% else %}
+                        <span class="badge badge-pending"><i class="fas fa-clock"></i> Pending</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-secondary">{{ sub.created_at|to_ist }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
     <div class="empty-state">
         <i class="fas fa-inbox"></i>

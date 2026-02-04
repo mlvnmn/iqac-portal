@@ -797,9 +797,10 @@ button,
     font-size: 1.125rem;
 }
 
-.empty-state p {
-    color: var(--text-muted);
-    font-size: 0.9375rem;
+
+@import url('responsive.css');
+color: var(--text-muted);
+font-size: 0.9375rem;
 }
 
 /* ========================================
