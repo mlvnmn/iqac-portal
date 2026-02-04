@@ -131,7 +131,7 @@ def init_db():
     
     # Admin
     admin = User(username="admin", role="admin", department_id=None)
-    admin.set_password("admin123")
+    admin.set_password("melvinjohn")
     users.append(admin)
 
     # Create teacher and student for each department
@@ -711,7 +711,7 @@ with app.app_context():
             
             # Admin
             admin = User(username="admin", role="admin", department_id=None)
-            admin.set_password("admin123")
+            admin.set_password("melvinjohn")
             users.append(admin)
 
             # Create teacher and student for each department

@@ -1,0 +1,82 @@
+==================================================
+IQAC PORTAL - LOGIN CREDENTIALS
+==================================================
+
+--------------------------------------------------
+SUPER ADMIN
+--------------------------------------------------
+Username: admin
+Password: melvinjohn
+
+--------------------------------------------------
+DEPARTMENT ACCOUNTS used by Teachers & Students
+--------------------------------------------------
+NOTE: The default password for ALL department accounts below is: 123
+
+1. Botany
+   - Teacher (Sub-Admin): teacher_botany
+   - Student:             student_botany
+
+2. Chemistry
+   - Teacher (Sub-Admin): teacher_chemistry
+   - Student:             student_chemistry
+
+3. Physics
+   - Teacher (Sub-Admin): teacher_physics
+   - Student:             student_physics
+
+4. Mathematics
+   - Teacher (Sub-Admin): teacher_mathematics
+   - Student:             student_mathematics
+
+5. English
+   - Teacher (Sub-Admin): teacher_english
+   - Student:             student_english
+
+6. Malayalam
+   - Teacher (Sub-Admin): teacher_malayalam
+   - Student:             student_malayalam
+
+7. Commerce
+   - Teacher (Sub-Admin): teacher_commerce
+   - Student:             student_commerce
+
+8. Computer Science
+   - Teacher (Sub-Admin): teacher_computer_science
+   - Student:             student_computer_science
+
+9. Psychology
+   - Teacher (Sub-Admin): teacher_psychology
+   - Student:             student_psychology
+
+10. Sociology
+    - Teacher (Sub-Admin): teacher_sociology
+    - Student:             student_sociology
+
+11. Statistics
+    - Teacher (Sub-Admin): teacher_statistics
+    - Student:             student_statistics
+
+12. Physical Education
+    - Teacher (Sub-Admin): teacher_physical_education
+    - Student:             student_physical_education
+
+13. Syriac
+    - Teacher (Sub-Admin): teacher_syriac
+    - Student:             student_syriac
+
+14. Zoology
+    - Teacher (Sub-Admin): teacher_zoology
+    - Student:             student_zoology
+
+15. Biotechnology
+    - Teacher (Sub-Admin): teacher_biotechnology
+    - Student:             student_biotechnology
+
+16. Economics
+    - Teacher (Sub-Admin): teacher_economics
+    - Student:             student_economics
+
+17. Social Work
+    - Teacher (Sub-Admin): teacher_social_work
+    - Student:             student_social_work
