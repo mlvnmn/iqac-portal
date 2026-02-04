@@ -748,14 +748,5 @@ with app.app_context():
     except Exception as e:
         print(f"Error during auto-initialization: {e}")
 
-@app.route('/reset-admin-password')
-def reset_admin_password():
-    user = User.query.filter_by(username='admin').first()
-    if user:
-        user.set_password('melvinjohn')
-        db.session.commit()
-        return "Admin password successfully updated to: melvinjohn. Please go back to login."
-    return "Admin user not found!"
-
 if __name__ == '__main__':
     app.run(debug=True)
