@@ -38,29 +38,31 @@
     </div>
 
     {% if event_types %}
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Event Type Name</th>
-                <th style="text-align: right;">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for et in event_types %}
-            <tr>
-                <td class="text-muted">#{{ et.id }}</td>
-                <td><strong>{{ et.name }}</strong></td>
-                <td style="text-align: right;">
-                    <a href="{{ url_for('delete_event_type', et_id=et.id) }}" class="btn btn-danger btn-sm"
-                        onclick="return confirm('Delete this event type?');">
-                        <i class="fas fa-trash"></i> Delete
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Event Type Name</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for et in event_types %}
+                <tr>
+                    <td class="text-muted">#{{ et.id }}</td>
+                    <td><strong>{{ et.name }}</strong></td>
+                    <td style="text-align: right;">
+                        <a href="{{ url_for('delete_event_type', et_id=et.id) }}" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Delete this event type?');">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
     <div class="empty-state">
         <i class="fas fa-calendar-alt"></i>

@@ -923,3 +923,138 @@ button,
     outline: 2px solid var(--mint-dark);
     outline-offset: 2px;
 }
+
+/* ========================================
+   RESPONSIVE DESIGN ADAPTATIONS
+   ======================================== */
+
+/* Table Responsiveness */
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+}
+
+.table-responsive .data-table {
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+/* Tablet & Mobile Breakpoints */
+@media (max-width: 992px) {
+
+    .main-container,
+    .glass-container {
+        padding: 2rem 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .main-container,
+    .glass-container {
+        padding: 1.5rem 1rem;
+    }
+
+    /* Navbar stacking */
+    .navbar {
+        height: auto;
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* Headers */
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .header-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .header-actions .btn {
+        flex: 1;
+        justify-content: center;
+    }
+
+    /* Forms */
+    .form-group label {
+        font-size: 0.8125rem;
+    }
+
+    input,
+    select,
+    textarea,
+    .btn {
+        font-size: 0.875rem;
+        padding: 0.625rem 0.875rem;
+    }
+
+    /* Modals */
+    #credentials-modal>div,
+    #edit-modal>div {
+        padding: 1.5rem !important;
+        width: 95% !important;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Tiny screens */
+    .navbar {
+        padding: 0.75rem;
+    }
+
+    .nav-brand {
+        font-size: 1.125rem;
+    }
+
+    /* Stack grid 3 items */
+    .grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .card,
+    .glass-card {
+        padding: 1.25rem;
+    }
+
+    /* Adjust submission card images */
+    .submission-card img {
+        height: 160px;
+    }
+
+    /* Login Page specific */
+    .login-wrapper {
+        padding: 1rem;
+    }
+
+    .login-container .glass-card {
+        padding: 2rem 1.5rem;
+    }
+
+    /* Search Form Stacking */
+    form .grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .section-title {
+        flex-wrap: wrap;
+    }
+}

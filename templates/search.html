@@ -75,39 +75,42 @@
     </div>
 
     {% if results %}
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Date & Time</th>
-                <th>Department</th>
-                <th>Event</th>
-                <th>User</th>
-                <th>Description</th>
-                <th>Image</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for sub in results %}
-            <tr>
-                <td class="text-secondary">{{ sub.created_at|to_ist }}</td>
-                <td><strong>{{ sub.department.name }}</strong></td>
-                <td>{{ sub.event_type }}</td>
-                <td>{{ sub.user.username }}</td>
-                <td class="text-secondary">{{ sub.description[:40] if sub.description else '—' }}{% if sub.description
-                    and sub.description|length > 40 %}...{% endif %}</td>
-                <td>
-                    {% if sub.image_filename %}
-                    <a href="{{ sub.image_filename }}" target="_blank" class="btn btn-outline btn-sm">
-                        <i class="fas fa-image"></i>
-                    </a>
-                    {% else %}
-                    <span class="text-muted">—</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Department</th>
+                    <th>Event</th>
+                    <th>User</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub in results %}
+                <tr>
+                    <td class="text-secondary">{{ sub.created_at|to_ist }}</td>
+                    <td><strong>{{ sub.department.name }}</strong></td>
+                    <td>{{ sub.event_type }}</td>
+                    <td>{{ sub.user.username }}</td>
+                    <td class="text-secondary">{{ sub.description[:40] if sub.description else '—' }}{% if
+                        sub.description
+                        and sub.description|length > 40 %}...{% endif %}</td>
+                    <td>
+                        {% if sub.image_filename %}
+                        <a href="{{ sub.image_filename }}" target="_blank" class="btn btn-outline btn-sm">
+                            <i class="fas fa-image"></i>
+                        </a>
+                        {% else %}
+                        <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
     <div class="empty-state">
         <i class="fas fa-search"></i>

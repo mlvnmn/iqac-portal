@@ -146,41 +146,43 @@ Student Account:
     </div>
 
     {% if departments %}
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Department Name</th>
-                <th>Teacher Account</th>
-                <th>Student Account</th>
-                <th style="text-align: right;">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for dept in departments %}
-            <tr>
-                <td class="text-muted">#{{ dept.id }}</td>
-                <td><strong>{{ dept.name }}</strong></td>
-                <td><code
-                        style="background: var(--cream); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8125rem;">teacher_{{ dept.name.lower().replace(' ', '_') }}</code>
-                </td>
-                <td><code
-                        style="background: var(--cream); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8125rem;">student_{{ dept.name.lower().replace(' ', '_') }}</code>
-                </td>
-                <td style="text-align: right;">
-                    <button type="button" class="btn btn-outline btn-sm"
-                        onclick="openEditModal({{ dept.id }}, '{{ dept.name }}', 'teacher_{{ dept.name.lower().replace(' ', '_') }}', 'student_{{ dept.name.lower().replace(' ', '_') }}')">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                    <a href="{{ url_for('delete_department', dept_id=dept.id) }}" class="btn btn-danger btn-sm"
-                        onclick="return confirm('Delete this department and all associated data?');">
-                        <i class="fas fa-trash"></i> Delete
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Department Name</th>
+                    <th>Teacher Account</th>
+                    <th>Student Account</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dept in departments %}
+                <tr>
+                    <td class="text-muted">#{{ dept.id }}</td>
+                    <td><strong>{{ dept.name }}</strong></td>
+                    <td><code
+                            style="background: var(--cream); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8125rem;">teacher_{{ dept.name.lower().replace(' ', '_') }}</code>
+                    </td>
+                    <td><code
+                            style="background: var(--cream); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8125rem;">student_{{ dept.name.lower().replace(' ', '_') }}</code>
+                    </td>
+                    <td style="text-align: right;">
+                        <button type="button" class="btn btn-outline btn-sm"
+                            onclick="openEditModal({{ dept.id }}, '{{ dept.name }}', 'teacher_{{ dept.name.lower().replace(' ', '_') }}', 'student_{{ dept.name.lower().replace(' ', '_') }}')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <a href="{{ url_for('delete_department', dept_id=dept.id) }}" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Delete this department and all associated data?');">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
     <div class="empty-state">
         <i class="fas fa-building"></i>
